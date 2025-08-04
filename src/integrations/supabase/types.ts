@@ -14,7 +14,228 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      campanhas_analisadas: {
+        Row: {
+          alcance: number
+          analise_ia: string | null
+          canais: string[]
+          cliques: number
+          cpm: number
+          criado_em: string
+          ctr: number
+          custo_conversao: number
+          duracao_dias: number
+          frequencia: number
+          id: string
+          investimento_total: number
+          link_destino: string
+          objetivo: string
+          observacoes: string | null
+          publico_alvo: string
+          roas: number | null
+          taxa_conversao: number
+          texto_anuncio: string
+          titulo_anuncio: string
+          user_id: string
+        }
+        Insert: {
+          alcance: number
+          analise_ia?: string | null
+          canais: string[]
+          cliques: number
+          cpm: number
+          criado_em?: string
+          ctr: number
+          custo_conversao: number
+          duracao_dias: number
+          frequencia: number
+          id?: string
+          investimento_total: number
+          link_destino: string
+          objetivo: string
+          observacoes?: string | null
+          publico_alvo: string
+          roas?: number | null
+          taxa_conversao: number
+          texto_anuncio: string
+          titulo_anuncio: string
+          user_id: string
+        }
+        Update: {
+          alcance?: number
+          analise_ia?: string | null
+          canais?: string[]
+          cliques?: number
+          cpm?: number
+          criado_em?: string
+          ctr?: number
+          custo_conversao?: number
+          duracao_dias?: number
+          frequencia?: number
+          id?: string
+          investimento_total?: number
+          link_destino?: string
+          objetivo?: string
+          observacoes?: string | null
+          publico_alvo?: string
+          roas?: number | null
+          taxa_conversao?: number
+          texto_anuncio?: string
+          titulo_anuncio?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      chat_mensagens: {
+        Row: {
+          criado_em: string
+          id: string
+          mensagem: string
+          sessao_id: string | null
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          criado_em?: string
+          id?: string
+          mensagem: string
+          sessao_id?: string | null
+          tipo: string
+          user_id: string
+        }
+        Update: {
+          criado_em?: string
+          id?: string
+          mensagem?: string
+          sessao_id?: string | null
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      conteudos_gerados: {
+        Row: {
+          criado_em: string
+          descricao: string
+          estrutura: string
+          formato: string
+          hashtags: string
+          horario_postagem: string
+          id: string
+          legenda: string
+          tema: string
+          user_id: string
+        }
+        Insert: {
+          criado_em?: string
+          descricao: string
+          estrutura: string
+          formato: string
+          hashtags: string
+          horario_postagem: string
+          id?: string
+          legenda: string
+          tema: string
+          user_id: string
+        }
+        Update: {
+          criado_em?: string
+          descricao?: string
+          estrutura?: string
+          formato?: string
+          hashtags?: string
+          horario_postagem?: string
+          id?: string
+          legenda?: string
+          tema?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          como_ajuda: string | null
+          criado_em: string
+          id: string
+          nicho: string | null
+          nome: string
+          plano_ativo: boolean
+          stripe_id: string | null
+        }
+        Insert: {
+          como_ajuda?: string | null
+          criado_em?: string
+          id: string
+          nicho?: string | null
+          nome: string
+          plano_ativo?: boolean
+          stripe_id?: string | null
+        }
+        Update: {
+          como_ajuda?: string | null
+          criado_em?: string
+          id?: string
+          nicho?: string | null
+          nome?: string
+          plano_ativo?: boolean
+          stripe_id?: string | null
+        }
+        Relationships: []
+      }
+      prompts_gerados: {
+        Row: {
+          briefing: string
+          criado_em: string
+          id: string
+          nicho: string
+          objetivo: string
+          prompt_gerado: string
+          tipo_ia: string
+          user_id: string
+        }
+        Insert: {
+          briefing: string
+          criado_em?: string
+          id?: string
+          nicho: string
+          objetivo: string
+          prompt_gerado: string
+          tipo_ia: string
+          user_id: string
+        }
+        Update: {
+          briefing?: string
+          criado_em?: string
+          id?: string
+          nicho?: string
+          objetivo?: string
+          prompt_gerado?: string
+          tipo_ia?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sugestoes: {
+        Row: {
+          criado_em: string
+          id: string
+          mensagem: string
+          user_id: string
+        }
+        Insert: {
+          criado_em?: string
+          id?: string
+          mensagem: string
+          user_id: string
+        }
+        Update: {
+          criado_em?: string
+          id?: string
+          mensagem?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
