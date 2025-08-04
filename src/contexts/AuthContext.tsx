@@ -1,4 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
+
+interface Profile {
+  id: string;
+  nome: string;
+  nicho?: string;
+  como_ajuda?: string;
+  plano_ativo: boolean;
+}
 
 interface User {
   id: string;
@@ -6,14 +16,16 @@ interface User {
   name: string;
   niche?: string;
   helpDescription?: string;
+  profile?: Profile;
 }
 
 interface AuthContextType {
   user: User | null;
+  session: Session | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<{ error?: string }>;
+  register: (name: string, email: string, password: string) => Promise<{ error?: string }>;
+  logout: () => Promise<void>;
   updateUser: (userData: Partial<User>) => void;
 }
 
@@ -29,69 +41,142 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Simular verificação de sessão
-    const savedUser = localStorage.getItem('clienteja_user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+  // Helper function to fetch user profile
+  const fetchUserProfile = async (userId: string): Promise<Profile | null> => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching profile:', error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      return null;
     }
-    setLoading(false);
+  };
+
+  // Helper function to create user object from Supabase user and profile
+  const createUserObject = async (supabaseUser: SupabaseUser): Promise<User> => {
+    const profile = await fetchUserProfile(supabaseUser.id);
+    
+    return {
+      id: supabaseUser.id,
+      email: supabaseUser.email || '',
+      name: profile?.nome || supabaseUser.email?.split('@')[0] || '',
+      niche: profile?.nicho,
+      helpDescription: profile?.como_ajuda,
+      profile
+    };
+  };
+
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setSession(session);
+        
+        if (session?.user) {
+          const userObject = await createUserObject(session.user);
+          setUser(userObject);
+        } else {
+          setUser(null);
+        }
+        
+        setLoading(false);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      setSession(session);
+      
+      if (session?.user) {
+        const userObject = await createUserObject(session.user);
+        setUser(userObject);
+      }
+      
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // Simular login - substituir por integração Supabase futuramente
-      const mockUser: User = {
-        id: '1',
+      const { error } = await supabase.auth.signInWithPassword({
         email,
-        name: email.split('@')[0],
-      };
-      setUser(mockUser);
-      localStorage.setItem('clienteja_user', JSON.stringify(mockUser));
+        password,
+      });
+
+      if (error) {
+        setLoading(false);
+        return { error: error.message };
+      }
+
+      return {};
     } catch (error) {
-      throw new Error('Erro ao fazer login');
-    } finally {
       setLoading(false);
+      return { error: 'Erro ao fazer login' };
     }
   };
 
   const register = async (name: string, email: string, password: string) => {
     setLoading(true);
     try {
-      // Simular registro - substituir por integração Supabase futuramente
-      const mockUser: User = {
-        id: Date.now().toString(),
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
         email,
-        name,
-      };
-      setUser(mockUser);
-      localStorage.setItem('clienteja_user', JSON.stringify(mockUser));
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            nome: name
+          }
+        }
+      });
+
+      if (error) {
+        setLoading(false);
+        return { error: error.message };
+      }
+
+      return {};
     } catch (error) {
-      throw new Error('Erro ao criar conta');
-    } finally {
       setLoading(false);
+      return { error: 'Erro ao criar conta' };
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('clienteja_user');
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   const updateUser = (userData: Partial<User>) => {
     if (user) {
       const updatedUser = { ...user, ...userData };
       setUser(updatedUser);
-      localStorage.setItem('clienteja_user', JSON.stringify(updatedUser));
     }
   };
 
   return (
     <AuthContext.Provider value={{
       user,
+      session,
       loading,
       login,
       register,

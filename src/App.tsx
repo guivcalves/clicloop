@@ -4,9 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { PublicRoute } from "./components/PublicRoute";
 
 // Pages
-
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Onboarding from "./pages/Onboarding";
@@ -33,10 +34,26 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="/login" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            } />
+            <Route path="/register" element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            } />
+            <Route path="/onboarding" element={
+              <ProtectedRoute>
+                <Onboarding />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }>
               <Route index element={<DashboardOverview />} />
               <Route path="conteudo" element={<DashboardContent />} />
               <Route path="prompts" element={<DashboardPrompts />} />
@@ -45,7 +62,11 @@ const App = () => (
               <Route path="suporte" element={<DashboardSupport />} />
               <Route path="sugestoes" element={<DashboardSuggestions />} />
             </Route>
-            <Route path="/billing" element={<Billing />} />
+            <Route path="/billing" element={
+              <ProtectedRoute>
+                <Billing />
+              </ProtectedRoute>
+            } />
             <Route path="/403" element={<Forbidden />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

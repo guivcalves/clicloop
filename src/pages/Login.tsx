@@ -6,32 +6,76 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha todos os campos.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast({
+        title: "Email inválido",
+        description: "Por favor, insira um email válido.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await login(email, password);
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo ao Cliente Já!",
-      });
-      navigate('/dashboard');
+      const { error } = await login(email, password);
+      
+      if (error) {
+        let errorMessage = "E-mail ou senha incorretos.";
+        
+        if (error.includes("Invalid login credentials")) {
+          errorMessage = "E-mail ou senha incorretos.";
+        } else if (error.includes("Email not confirmed")) {
+          errorMessage = "Por favor, confirme seu e-mail antes de fazer login.";
+        } else if (error.includes("Too many requests")) {
+          errorMessage = "Muitas tentativas. Tente novamente em alguns minutos.";
+        }
+        
+        toast({
+          title: "Erro ao fazer login",
+          description: errorMessage,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Login realizado com sucesso",
+          description: "Bem-vindo de volta!"
+        });
+        navigate('/dashboard');
+      }
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Erro no login",
-        description: "E-mail ou senha incorretos.",
+        title: "Erro inesperado",
+        description: "Tente novamente em alguns instantes.",
+        variant: "destructive"
       });
     } finally {
       setLoading(false);
@@ -67,15 +111,29 @@ const Login = () => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Senha</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="rounded-xl"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Digite sua senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="rounded-xl pr-10"
+                  disabled={loading}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
             </div>
             <Button 
               type="submit" 
