@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MessageCircle, Send, Bot, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Message {
   id: string;
@@ -25,6 +27,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -45,21 +48,74 @@ const Chat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentMessage = inputMessage;
     setInputMessage('');
     setLoading(true);
 
-    // Simular resposta da IA (substituir por integração ChatGPT futuramente)
-    setTimeout(() => {
+    try {
+      // Chamar edge function da OpenAI
+      const { data: aiResponse, error: aiError } = await supabase.functions.invoke('chat-ai', {
+        body: {
+          prompt: currentMessage,
+          type: 'chat'
+        }
+      });
+
+      if (aiError) throw aiError;
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: `Entendi sua pergunta sobre "${inputMessage}". Aqui está minha resposta baseada nas melhores práticas de marketing digital e vendas. Como posso ajudá-lo mais especificamente com isso?`,
+        content: aiResponse.generatedText,
         role: 'assistant',
         timestamp: new Date()
       };
       
       setMessages(prev => [...prev, aiMessage]);
+
+      // Salvar mensagens no banco
+      const messagesToSave = [
+        {
+          user_id: user?.id,
+          tipo: 'user',
+          mensagem: currentMessage,
+          sessao_id: null
+        },
+        {
+          user_id: user?.id,
+          tipo: 'ia',
+          mensagem: aiResponse.generatedText,
+          sessao_id: null
+        }
+      ];
+
+      if (user) {
+        const { error: dbError } = await supabase
+          .from('chat_mensagens')
+          .insert(messagesToSave);
+
+        if (dbError) {
+          console.error('Erro ao salvar mensagens:', dbError);
+        }
+      }
+
+    } catch (error) {
+      console.error('Erro ao enviar mensagem:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'Desculpe, ocorreu um erro ao processar sua mensagem. Tente novamente.',
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      
+      toast({
+        variant: "destructive",
+        title: "Erro ao enviar mensagem",
+        description: "Tente novamente em alguns instantes.",
+      });
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

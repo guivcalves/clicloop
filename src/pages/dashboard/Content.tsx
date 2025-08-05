@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Copy, Wand2, Clock, Hash, Target, Layout } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Content = () => {
   const [description, setDescription] = useState('');
@@ -13,6 +15,7 @@ const Content = () => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<any>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -32,20 +35,98 @@ const Content = () => {
       return;
     }
 
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para usar esta funcionalidade.",
+      });
+      return;
+    }
+
     setLoading(true);
     
-    // Simular geração de conteúdo (substituir por IA futuramente)
-    setTimeout(() => {
-      setResults({
-        theme: `Tema sugerido para ${format.toLowerCase()}`,
-        idealFormat: format,
-        structure: "1. Abertura cativante\n2. Desenvolvimento do conteúdo\n3. Call to action",
-        caption: "✨ Sua legenda incrível aqui! Engaje sua audiência com este conteúdo especial. 💡 Dicas valiosas para o seu negócio crescer. 🚀",
-        hashtags: "#marketing #digitalmarketing #empreendedorismo #negócios #dicas #sucesso #clientejá",
-        bestTime: "Entre 18h e 21h (maior engajamento)"
+    try {
+      // Buscar dados do perfil do usuário
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('nicho')
+        .eq('id', user.id)
+        .single();
+
+      // Chamar edge function da OpenAI
+      const { data: aiResponse, error: aiError } = await supabase.functions.invoke('chat-ai', {
+        body: {
+          prompt: description,
+          type: 'content',
+          data: {
+            nicho: profile?.nicho || 'Marketing Digital',
+            objetivo: 'Engajamento e crescimento no Instagram',
+            descricao: description,
+            formato: format
+          }
+        }
       });
+
+      if (aiError) throw aiError;
+
+      const generatedText = aiResponse.generatedText;
+
+      // Extrair informações do texto gerado da IA
+      const lines = generatedText.split('\n').filter(line => line.trim());
+      const theme = lines.find(line => line.includes('Tema')) || `Tema para ${format}`;
+      const structure = lines.slice(0, 5).join('\n');
+      const caption = lines.find(line => line.length > 50) || generatedText.substring(0, 200);
+      const hashtags = lines.find(line => line.includes('#')) || '#marketing #digitalmarketing #clienteja';
+      const bestTime = lines.find(line => line.includes('horário') || line.includes('hora')) || 'Entre 18h e 21h';
+
+      setResults({
+        theme: theme.replace(/^.*?:/, '').trim(),
+        idealFormat: format,
+        structure: structure,
+        caption: caption,
+        hashtags: hashtags,
+        bestTime: bestTime.replace(/^.*?:/, '').trim()
+      });
+
+      // Salvar no banco de dados
+      const { error: dbError } = await supabase
+        .from('conteudos_gerados')
+        .insert({
+          user_id: user.id,
+          descricao: description,
+          formato: format,
+          tema: theme.replace(/^.*?:/, '').trim(),
+          estrutura: structure,
+          legenda: caption,
+          hashtags: hashtags,
+          horario_postagem: bestTime.replace(/^.*?:/, '').trim()
+        });
+
+      if (dbError) {
+        console.error('Erro ao salvar conteúdo:', dbError);
+        toast({
+          variant: "destructive",
+          title: "Erro ao salvar",
+          description: "Conteúdo gerado, mas não foi possível salvar no histórico.",
+        });
+      } else {
+        toast({
+          title: "Conteúdo gerado com sucesso!",
+          description: "Seu conteúdo foi criado e salvo no histórico.",
+        });
+      }
+
+    } catch (error) {
+      console.error('Erro ao gerar conteúdo:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao gerar conteúdo",
+        description: "Tente novamente em alguns instantes.",
+      });
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (

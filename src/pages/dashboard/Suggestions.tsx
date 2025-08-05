@@ -5,12 +5,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Lightbulb, Send, Heart, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Suggestions = () => {
   const [suggestion, setSuggestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,18 +27,45 @@ const Suggestions = () => {
       return;
     }
 
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para enviar sugestões.",
+      });
+      return;
+    }
+
     setLoading(true);
     
-    // Simular envio da sugestão (substituir por integração Supabase futuramente)
-    setTimeout(() => {
+    try {
+      // Salvar sugestão no banco de dados
+      const { error: dbError } = await supabase
+        .from('sugestoes')
+        .insert({
+          user_id: user.id,
+          mensagem: suggestion.trim()
+        });
+
+      if (dbError) throw dbError;
+
       setSubmitted(true);
-      setLoading(false);
       setSuggestion('');
       toast({
         title: "Sugestão enviada!",
         description: "Obrigado pela sugestão! Vamos considerar com carinho.",
       });
-    }, 1000);
+
+    } catch (error) {
+      console.error('Erro ao enviar sugestão:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao enviar sugestão",
+        description: "Tente novamente em alguns instantes.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const suggestions = [

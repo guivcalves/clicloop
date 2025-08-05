@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Copy, Brain, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Prompts = () => {
   const [niche, setNiche] = useState('');
@@ -16,6 +18,7 @@ const Prompts = () => {
   const [loading, setLoading] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const copyPrompt = () => {
     navigator.clipboard.writeText(generatedPrompt);
@@ -35,27 +38,73 @@ const Prompts = () => {
       return;
     }
 
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Erro de autenticação",
+        description: "Você precisa estar logado para usar esta funcionalidade.",
+      });
+      return;
+    }
+
     setLoading(true);
     
-    // Simular geração de prompt (substituir por IA futuramente)
-    setTimeout(() => {
-      const prompt = `Você é um especialista em ${niche}. Seu objetivo é ${objective}.
+    try {
+      // Chamar edge function da OpenAI
+      const { data: aiResponse, error: aiError } = await supabase.functions.invoke('chat-ai', {
+        body: {
+          prompt: `Crie um prompt profissional para ${aiType} focado em ${niche} com o objetivo de ${objective}. Briefing: ${briefing}`,
+          type: 'prompt',
+          data: {
+            nicho: niche,
+            objetivo: objective,
+            aiType: aiType,
+            briefing: briefing
+          }
+        }
+      });
 
-Contexto e briefing:
-${briefing}
+      if (aiError) throw aiError;
 
-Instruções específicas para ${aiType.toLowerCase()}:
-- Seja preciso e relevante para o nicho de ${niche}
-- Mantenha o foco no objetivo: ${objective}
-- Use uma linguagem profissional mas acessível
-- Forneça exemplos práticos quando possível
-- Estruture a resposta de forma clara e organizada
+      const generatedText = aiResponse.generatedText;
+      setGeneratedPrompt(generatedText);
 
-Por favor, desenvolva uma resposta completa e acionável baseada nessas diretrizes.`;
+      // Salvar no banco de dados
+      const { error: dbError } = await supabase
+        .from('prompts_gerados')
+        .insert({
+          user_id: user.id,
+          nicho: niche,
+          objetivo: objective,
+          tipo_ia: aiType,
+          briefing: briefing,
+          prompt_gerado: generatedText
+        });
 
-      setGeneratedPrompt(prompt);
+      if (dbError) {
+        console.error('Erro ao salvar prompt:', dbError);
+        toast({
+          variant: "destructive",
+          title: "Erro ao salvar",
+          description: "Prompt gerado, mas não foi possível salvar no histórico.",
+        });
+      } else {
+        toast({
+          title: "Prompt criado com sucesso!",
+          description: "Seu prompt foi gerado e salvo no histórico.",
+        });
+      }
+
+    } catch (error) {
+      console.error('Erro ao gerar prompt:', error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao gerar prompt",
+        description: "Tente novamente em alguns instantes.",
+      });
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
