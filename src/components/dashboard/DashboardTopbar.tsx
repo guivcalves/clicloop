@@ -45,24 +45,9 @@ export function DashboardTopbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="flex h-16 items-center px-6">
         <SidebarTrigger className="text-gray-600" />
-        
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md mx-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Search" 
-              className="pl-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-gray-300"
-            />
-          </div>
-        </div>
 
         {/* Right Side */}
         <div className="ml-auto flex items-center gap-4">
-          {/* Language Selector */}
-          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
-            EN
-          </Button>
 
           {/* Notifications */}
           <Button variant="ghost" size="sm" className="relative">
@@ -71,10 +56,11 @@ export function DashboardTopbar() {
 
           {/* User Profile */}
           <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-sm font-medium text-gray-900">{user?.name || 'John Doe'}</p>
-              <p className="text-xs text-gray-500">John Doe</p>
-            </div>
+            {user?.name && (
+              <div className="text-right">
+                <p className="text-sm font-medium text-gray-900">{user.name}</p>
+              </div>
+            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
@@ -89,10 +75,12 @@ export function DashboardTopbar() {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user?.name || 'John Doe'}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user?.email || 'john@example.com'}
-                    </p>
+                    {user?.name && <p className="text-sm font-medium leading-none">{user.name}</p>}
+                    {user?.email && (
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    )}
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

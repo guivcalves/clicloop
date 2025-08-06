@@ -18,10 +18,47 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 const Overview = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [stats, setStats] = useState({
+    tools: 6,
+    content: 0,
+    prompts: 0
+  });
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      if (!user?.id) return;
+
+      try {
+        // Count conteudos_gerados
+        const { count: contentCount } = await supabase
+          .from('conteudos_gerados')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id);
+
+        // Count prompts_gerados
+        const { count: promptsCount } = await supabase
+          .from('prompts_gerados')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id);
+
+        setStats({
+          tools: 6,
+          content: contentCount || 0,
+          prompts: promptsCount || 0
+        });
+      } catch (error) {
+        console.error('Error fetching user stats:', error);
+      }
+    };
+
+    fetchUserStats();
+  }, [user?.id]);
 
   const tools = [
     {
@@ -83,21 +120,21 @@ const Overview = () => {
   const statsCards = [
     {
       title: "Ferramentas Ativas",
-      value: "6",
+      value: stats.tools.toString(),
       icon: Brain,
       bgColor: "bg-gradient-to-br from-indigo-50 to-purple-50",
       iconColor: "text-indigo-600"
     },
     {
       title: "Conteúdos Criados",
-      value: "127",
+      value: stats.content.toString(),
       icon: FileText,
       bgColor: "bg-gradient-to-br from-blue-50 to-indigo-50",
       iconColor: "text-blue-600"
     },
     {
       title: "Prompts Gerados",
-      value: "89",
+      value: stats.prompts.toString(),
       icon: Sparkles,
       bgColor: "bg-gradient-to-br from-purple-50 to-pink-50",
       iconColor: "text-purple-600"
@@ -111,7 +148,7 @@ const Overview = () => {
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-2 text-gray-900">
-              Bem-vindo ao Cliente Já, {user?.name || 'John Doe'}!
+              Bem-vindo ao Cliente Já{user?.name ? `, ${user.name}` : ''}!
             </h1>
             <p className="text-gray-600 mb-6 max-w-md">
               Escolha uma ferramenta para começar a criar conteúdo otimizado 

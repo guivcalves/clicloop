@@ -91,9 +91,6 @@ export function DashboardSidebar() {
         {/* Logo/Brand Section */}
         <div className="p-6 border-b border-white/20">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
-              <Triangle className="h-4 w-4 text-indigo-600 fill-indigo-600" />
-            </div>
             {!collapsed && (
               <h1 className="text-lg font-semibold text-white">Cliente Já</h1>
             )}
