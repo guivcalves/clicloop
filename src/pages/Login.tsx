@@ -49,16 +49,12 @@ const Login = () => {
       const { error } = await login(email, password);
       
       if (error) {
-        let errorMessage = "E-mail ou senha incorretos.";
+        let errorMessage = "E-mail ou senha incorretos. Verifique suas credenciais e tente novamente.";
         
-        if (error.includes("Invalid login credentials")) {
-          errorMessage = "E-mail ou senha incorretos.";
-        } else if (error.includes("Email not confirmed")) {
-          errorMessage = "Por favor, confirme seu e-mail antes de fazer login.";
-        } else if (error.includes("Too many requests")) {
-          errorMessage = "Muitas tentativas. Tente novamente em alguns minutos.";
-        }
-        
+        // As mensagens de erro específicas foram removidas para evitar a enumeração de usuários.
+        // O tratamento de "Email not confirmed" ou "Too many requests" pode ser feito
+        // de forma mais segura no backend ou com uma UX diferente, se necessário.
+
         toast({
           title: "Erro ao fazer login",
           description: errorMessage,
