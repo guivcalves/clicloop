@@ -20,6 +20,7 @@ import DashboardChat from "./pages/dashboard/Chat";
 import DashboardSupport from "./pages/dashboard/Support";
 import DashboardSuggestions from "./pages/dashboard/Suggestions";
 import Billing from "./pages/Billing";
+import MinhaConta from "./pages/MinhaConta";
 import NotFound from "./pages/NotFound";
 import Forbidden from "./pages/Forbidden";
 
@@ -65,6 +66,11 @@ const App = () => (
             <Route path="/billing" element={
               <ProtectedRoute>
                 <Billing />
+              </ProtectedRoute>
+            } />
+            <Route path="/minha-conta" element={
+              <ProtectedRoute>
+                <MinhaConta />
               </ProtectedRoute>
             } />
             <Route path="/403" element={<Forbidden />} />

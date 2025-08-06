@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Eye, EyeOff } from 'lucide-react';
@@ -13,6 +14,7 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const { toast } = useToast();
@@ -30,6 +32,15 @@ const Register = () => {
       toast({
         title: "Campos obrigatórios",
         description: "Por favor, preencha todos os campos.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!acceptedTerms) {
+      toast({
+        title: "Termos obrigatórios",
+        description: "É necessário aceitar os Termos de Uso e a Política de Privacidade.",
         variant: "destructive"
       });
       return;
@@ -166,10 +177,29 @@ const Register = () => {
                 </Button>
               </div>
             </div>
+            <div className="flex items-start space-x-2">
+              <Checkbox
+                id="terms"
+                checked={acceptedTerms}
+                onCheckedChange={(checked) => setAcceptedTerms(checked as boolean)}
+                disabled={loading}
+                className="mt-1"
+              />
+              <Label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed">
+                Li e concordo com os{' '}
+                <Link to="/termos-de-uso" className="text-brand-primary hover:underline" target="_blank">
+                  Termos de Uso
+                </Link>{' '}
+                e a{' '}
+                <Link to="/politica-de-privacidade" className="text-brand-primary hover:underline" target="_blank">
+                  Política de Privacidade
+                </Link>
+              </Label>
+            </div>
             <Button 
               type="submit" 
               className="w-full rounded-xl bg-gradient-primary hover:opacity-90 transition-fast"
-              disabled={loading}
+              disabled={loading || !acceptedTerms}
             >
               {loading ? "Criando conta..." : "Criar conta"}
             </Button>

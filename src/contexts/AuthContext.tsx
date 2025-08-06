@@ -157,7 +157,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -165,6 +165,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         setLoading(false);
         return { error: error.message };
+      }
+
+      // Log de auditoria para login bem-sucedido
+      if (data.user) {
+        try {
+          await supabase.from('logs_auditoria').insert({
+            user_id: data.user.id,
+            acao: 'LOGIN',
+            detalhes: 'Usuário fez login na aplicação'
+          });
+        } catch (logError) {
+          console.error('Erro ao registrar log de login:', logError);
+        }
       }
 
       return {};
@@ -179,7 +192,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const redirectUrl = `${window.location.origin}/`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -195,6 +208,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error.message };
       }
 
+      // Log de auditoria para registro bem-sucedido
+      if (data.user) {
+        try {
+          await supabase.from('logs_auditoria').insert({
+            user_id: data.user.id,
+            acao: 'REGISTRO',
+            detalhes: 'Nova conta criada com consentimento LGPD'
+          });
+        } catch (logError) {
+          console.error('Erro ao registrar log de registro:', logError);
+        }
+      }
+
       return {};
     } catch (error) {
       setLoading(false);
@@ -203,6 +229,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
+    // Log de auditoria para logout
+    if (user?.id) {
+      try {
+        await supabase.from('logs_auditoria').insert({
+          user_id: user.id,
+          acao: 'LOGOUT',
+          detalhes: 'Usuário fez logout da aplicação'
+        });
+      } catch (logError) {
+        console.error('Erro ao registrar log de logout:', logError);
+      }
+    }
+
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error logging out:', error);

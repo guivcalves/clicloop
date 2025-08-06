@@ -41,6 +41,10 @@ export function DashboardTopbar() {
     });
   };
 
+  const handleMinhaConta = () => {
+    navigate('/minha-conta');
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="flex h-16 items-center px-6">
@@ -84,6 +88,10 @@ export function DashboardTopbar() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleMinhaConta}>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Minha Conta</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleManageSubscription}>
                   <CreditCard className="mr-2 h-4 w-4" />
                   <span>Gerenciar assinatura</span>
