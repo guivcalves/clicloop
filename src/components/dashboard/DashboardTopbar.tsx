@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, Settings, CreditCard, LogOut, Sparkles } from 'lucide-react';
+import { User, Settings, CreditCard, LogOut, Search, Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export function DashboardTopbar() {
@@ -41,49 +42,76 @@ export function DashboardTopbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-14 items-center px-4">
-        <SidebarTrigger />
+    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <div className="flex h-16 items-center px-6">
+        <SidebarTrigger className="text-gray-600" />
         
-        <div className="flex items-center gap-2 ml-4">
-          <Sparkles className="h-6 w-6 text-brand-primary" />
-          <span className="font-bold text-brand-primary">Cliente Já</span>
+        {/* Search Bar */}
+        <div className="flex-1 max-w-md mx-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input 
+              placeholder="Search" 
+              className="pl-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-gray-300"
+            />
+          </div>
         </div>
 
+        {/* Right Side */}
         <div className="ml-auto flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <div className="h-8 w-8 rounded-full bg-brand-primary text-white flex items-center justify-center">
-                  <User className="h-4 w-4" />
-                </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">
-                    {user?.email}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleManageSubscription}>
-                <CreditCard className="mr-2 h-4 w-4" />
-                <span>Gerenciar assinatura</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleCancelSubscription}>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Cancelar assinatura</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sair</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Language Selector */}
+          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+            EN
+          </Button>
+
+          {/* Notifications */}
+          <Button variant="ghost" size="sm" className="relative">
+            <Bell className="h-5 w-5 text-gray-600" />
+          </Button>
+
+          {/* User Profile */}
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-sm font-medium text-gray-900">{user?.name || 'John Doe'}</p>
+              <p className="text-xs text-gray-500">John Doe</p>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+                  <div 
+                    className="h-10 w-10 rounded-full flex items-center justify-center"
+                    style={{ background: 'linear-gradient(135deg, #6366F1 0%, #9333EA 100%)' }}
+                  >
+                    <User className="h-5 w-5 text-white" />
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user?.name || 'John Doe'}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user?.email || 'john@example.com'}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleManageSubscription}>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  <span>Gerenciar assinatura</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleCancelSubscription}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Cancelar assinatura</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sair</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
     </header>

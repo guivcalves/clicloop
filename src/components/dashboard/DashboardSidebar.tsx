@@ -17,15 +17,16 @@ import {
   MessageCircle, 
   HelpCircle, 
   Lightbulb,
-  Sparkles,
-  Layout
+  Home,
+  Layout,
+  Triangle
 } from 'lucide-react';
 
 const menuItems = [
   {
     title: "Dashboard",
     url: "/dashboard",
-    icon: Layout,
+    icon: Home,
   },
   {
     title: "Criador de Conteúdo",
@@ -78,39 +79,54 @@ export function DashboardSidebar() {
       : "hover:bg-muted/50";
 
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible="icon">
-      <SidebarContent>
-        <div className="p-4">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-6 w-6 text-brand-primary" />
+    <Sidebar 
+      className={`${collapsed ? "w-16" : "w-60"} border-r-0`} 
+      collapsible="icon"
+      style={{ background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)' }}
+    >
+      <SidebarContent 
+        className="text-white"
+        style={{ background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)' }}
+      >
+        {/* Logo/Brand Section */}
+        <div className="p-6 border-b border-white/20">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-white rounded flex items-center justify-center">
+              <Triangle className="h-4 w-4 text-indigo-600 fill-indigo-600" />
+            </div>
             {!collapsed && (
-              <h1 className="text-xl font-bold text-brand-primary">Cliente Já</h1>
+              <h1 className="text-lg font-semibold text-white">Cliente Já</h1>
             )}
           </div>
         </div>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Ferramentas</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      className={({ isActive: navIsActive }) => 
-                        getNavClass(navIsActive || isActive(item.url))
-                      }
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* Navigation Menu */}
+        <div className="px-3 py-6">
+          <SidebarMenu className="space-y-2">
+            {menuItems.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild className="hover:bg-white/10">
+                  <NavLink 
+                    to={item.url} 
+                    className={({ isActive: navIsActive }) => {
+                      const active = navIsActive || isActive(item.url);
+                      return `flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
+                        active 
+                          ? "bg-white/20 text-white shadow-lg" 
+                          : "text-white/80 hover:text-white hover:bg-white/10"
+                      }`;
+                    }}
+                  >
+                    <item.icon className="h-5 w-5 flex-shrink-0" />
+                    {!collapsed && (
+                      <span className="text-sm font-medium">{item.title}</span>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </div>
       </SidebarContent>
     </Sidebar>
   );
