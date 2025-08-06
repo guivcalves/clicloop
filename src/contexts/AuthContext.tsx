@@ -82,62 +82,71 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let mounted = true;
 
-    // Check for existing session first
-    const initializeAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!mounted) return;
-        
-        setSession(session);
-        
-        if (session?.user) {
-          const userObject = await createUserObject(session.user);
-          if (mounted) {
-            setUser(userObject);
-          }
-        } else {
-          if (mounted) {
-            setUser(null);
-          }
-        }
-        
-        if (mounted) {
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Error initializing auth:', error);
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    // Set up auth state listener
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         if (!mounted) return;
         
+        // Only synchronous state updates here
         setSession(session);
+        setLoading(false);
         
+        // Defer profile fetching to avoid deadlocks
         if (session?.user) {
-          const userObject = await createUserObject(session.user);
-          if (mounted) {
-            setUser(userObject);
-          }
+          setTimeout(() => {
+            if (mounted) {
+              createUserObject(session.user).then(userObject => {
+                if (mounted) {
+                  setUser(userObject);
+                }
+              }).catch(error => {
+                console.error('Error creating user object:', error);
+                if (mounted) {
+                  setUser({
+                    id: session.user.id,
+                    email: session.user.email || '',
+                    name: session.user.email?.split('@')[0] || '',
+                  });
+                }
+              });
+            }
+          }, 0);
         } else {
-          if (mounted) {
-            setUser(null);
-          }
-        }
-        
-        if (mounted) {
-          setLoading(false);
+          setUser(null);
         }
       }
     );
 
-    initializeAuth();
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!mounted) return;
+      
+      setSession(session);
+      setLoading(false);
+      
+      if (session?.user) {
+        setTimeout(() => {
+          if (mounted) {
+            createUserObject(session.user).then(userObject => {
+              if (mounted) {
+                setUser(userObject);
+              }
+            }).catch(error => {
+              console.error('Error creating user object:', error);
+              if (mounted) {
+                setUser({
+                  id: session.user.id,
+                  email: session.user.email || '',
+                  name: session.user.email?.split('@')[0] || '',
+                });
+              }
+            });
+          }
+        }, 0);
+      } else {
+        setUser(null);
+      }
+    });
 
     return () => {
       mounted = false;
