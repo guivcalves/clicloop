@@ -167,17 +167,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error.message };
       }
 
-      // Log de auditoria para login bem-sucedido
+      // Log de auditoria será implementado após migração
       if (data.user) {
-        try {
-          await supabase.from('logs_auditoria').insert({
-            user_id: data.user.id,
-            acao: 'LOGIN',
-            detalhes: 'Usuário fez login na aplicação'
-          });
-        } catch (logError) {
-          console.error('Erro ao registrar log de login:', logError);
-        }
+        console.log('Login realizado para usuário:', data.user.id);
       }
 
       return {};
@@ -208,17 +200,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error.message };
       }
 
-      // Log de auditoria para registro bem-sucedido
+      // Log de auditoria será implementado após migração
       if (data.user) {
-        try {
-          await supabase.from('logs_auditoria').insert({
-            user_id: data.user.id,
-            acao: 'REGISTRO',
-            detalhes: 'Nova conta criada com consentimento LGPD'
-          });
-        } catch (logError) {
-          console.error('Erro ao registrar log de registro:', logError);
-        }
+        console.log('Registro realizado para usuário:', data.user.id);
       }
 
       return {};
@@ -229,17 +213,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    // Log de auditoria para logout
+    // Log de auditoria será implementado após migração
     if (user?.id) {
-      try {
-        await supabase.from('logs_auditoria').insert({
-          user_id: user.id,
-          acao: 'LOGOUT',
-          detalhes: 'Usuário fez logout da aplicação'
-        });
-      } catch (logError) {
-        console.error('Erro ao registrar log de logout:', logError);
-      }
+      console.log('Logout realizado para usuário:', user.id);
     }
 
     const { error } = await supabase.auth.signOut();

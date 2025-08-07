@@ -47,12 +47,8 @@ const MinhaConta = () => {
 
       if (error) throw error;
 
-      // Log de auditoria
-      await supabase.from('logs_auditoria').insert({
-        user_id: user?.id,
-        acao: 'ATUALIZAÇÃO_PERFIL',
-        detalhes: 'Dados do perfil atualizados pelo usuário'
-      });
+      // Log de auditoria será implementado após migração
+      console.log('Perfil atualizado para usuário:', user?.id);
 
       toast({
         title: "Perfil atualizado",
@@ -104,12 +100,8 @@ const MinhaConta = () => {
       link.click();
       URL.revokeObjectURL(url);
 
-      // Log de auditoria
-      await supabase.from('logs_auditoria').insert({
-        user_id: user?.id,
-        acao: 'EXPORTAÇÃO_DADOS',
-        detalhes: 'Usuário exportou seus dados pessoais (direito à portabilidade)'
-      });
+      // Log de auditoria será implementado após migração
+      console.log('Dados exportados para usuário:', user?.id);
 
       toast({
         title: "Dados exportados",
@@ -131,12 +123,8 @@ const MinhaConta = () => {
     setLoadingDelete(true);
 
     try {
-      // Log de auditoria antes da exclusão
-      await supabase.from('logs_auditoria').insert({
-        user_id: user?.id,
-        acao: 'EXCLUSÃO_CONTA',
-        detalhes: 'Usuário solicitou exclusão permanente da conta (direito ao esquecimento)'
-      });
+      // Log de auditoria será implementado após migração
+      console.log('Conta sendo excluída para usuário:', user?.id);
 
       // Deletar dados do usuário (o CASCADE vai cuidar das tabelas relacionadas)
       const { error: deleteError } = await supabase
