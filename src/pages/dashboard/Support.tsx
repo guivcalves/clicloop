@@ -3,9 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Mail, MessageSquare, FileText, Clock } from 'lucide-react';
 
 const Support = () => {
-  const handleEmailSupport = () => {
-    window.open('mailto:admclicloop@gmail.com?subject=Suporte ClicLoop&body=Olá, preciso de ajuda com:', '_blank');
-  };
 
   return (
     <div className="space-y-6">
@@ -32,13 +29,10 @@ const Support = () => {
               Envie sua dúvida ou problema para nossa equipe especializada. 
               Respondemos em até 24 horas.
             </p>
-            <Button 
-              onClick={handleEmailSupport}
-              className="w-full rounded-xl bg-gradient-primary hover:opacity-90 transition-fast"
-            >
-              <Mail className="h-4 w-4 mr-2" />
-              Enviar e-mail
-            </Button>
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="font-medium text-sm mb-1">E-mail para contato:</p>
+              <p className="text-foreground font-mono">admclicloop@gmail.com</p>
+            </div>
           </CardContent>
         </Card>
 
