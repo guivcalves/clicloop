@@ -30,7 +30,7 @@ const Billing = () => {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <Sparkles className="h-8 w-8 text-brand-primary mr-2" />
-            <h1 className="text-2xl font-bold text-brand-primary">Cliente Já</h1>
+            <h1 className="text-2xl font-bold text-brand-primary">ClicLoop</h1>
           </div>
           <h2 className="text-2xl font-bold mb-2">Assine para desbloquear todas as ferramentas</h2>
           <p className="text-muted-foreground">

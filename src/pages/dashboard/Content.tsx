@@ -77,7 +77,7 @@ const Content = () => {
       const theme = lines.find(line => line.includes('Tema')) || `Tema para ${format}`;
       const structure = lines.slice(0, 5).join('\n');
       const caption = lines.find(line => line.length > 50) || generatedText.substring(0, 200);
-      const hashtags = lines.find(line => line.includes('#')) || '#marketing #digitalmarketing #clienteja';
+      const hashtags = lines.find(line => line.includes('#')) || '#marketing #digitalmarketing #clicloop';
       const bestTime = lines.find(line => line.includes('horário') || line.includes('hora')) || 'Entre 18h e 21h';
 
       setResults({

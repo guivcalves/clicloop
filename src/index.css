@@ -36,7 +36,7 @@ All colors MUST be HSL.
     --input: 220 25% 90%;
     --ring: 260 85% 60%;
 
-    /* Design system específico do Cliente Já - cores mais vibrantes */
+    /* Design system específico do ClicLoop - cores mais vibrantes */
     --brand-primary: 260 80% 65%;      /* Lilás mais forte */
     --brand-secondary: 200 90% 70%;    /* Azul mais vibrante */
     --brand-accent: 260 50% 90%;       /* Lilás claro mais saturado */

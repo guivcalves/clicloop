@@ -92,7 +92,7 @@ export function DashboardSidebar() {
         <div className="p-6 border-b border-white/20">
           <div className="flex items-center gap-3">
             {!collapsed && (
-              <h1 className="text-lg font-semibold text-white">Cliente Já</h1>
+              <h1 className="text-lg font-semibold text-white">ClicLoop</h1>
             )}
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Mail, MessageSquare, FileText, Clock } from 'lucide-react';
 
 const Support = () => {
   const handleEmailSupport = () => {
-    window.open('mailto:admclienteja@gmail.com?subject=Suporte Cliente Já&body=Olá, preciso de ajuda com:', '_blank');
+    window.open('mailto:admclicloop@gmail.com?subject=Suporte ClicLoop&body=Olá, preciso de ajuda com:', '_blank');
   };
 
   return (

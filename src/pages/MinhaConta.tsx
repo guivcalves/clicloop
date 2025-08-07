@@ -96,7 +96,7 @@ const MinhaConta = () => {
       const url = URL.createObjectURL(dataBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `meus-dados-cliente-ja-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `meus-dados-clicloop-${new Date().toISOString().split('T')[0]}.json`;
       link.click();
       URL.revokeObjectURL(url);
 
@@ -334,8 +334,8 @@ const MinhaConta = () => {
                   <li>Revogar o consentimento</li>
                 </ul>
                 <p className="mt-4">
-                  <strong>Encarregado (DPO):</strong> Cliente Já<br />
-                  <strong>Contato:</strong> admclienteja@gmail.com
+                  <strong>Encarregado (DPO):</strong> ClicLoop<br />
+                  <strong>Contato:</strong> admclicloop@gmail.com
                 </p>
               </CardContent>
             </Card>

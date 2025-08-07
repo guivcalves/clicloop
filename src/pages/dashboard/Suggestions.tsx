@@ -96,7 +96,7 @@ const Suggestions = () => {
       <div>
         <h1 className="text-3xl font-bold mb-2">Sugestões</h1>
         <p className="text-muted-foreground">
-          Ajude-nos a melhorar o Cliente Já com suas ideias e feedback
+          Ajude-nos a melhorar o ClicLoop com suas ideias e feedback
         </p>
       </div>
 
@@ -107,14 +107,14 @@ const Suggestions = () => {
             Sugira uma melhoria
           </CardTitle>
           <CardDescription>
-            Sua opinião é muito importante para nós. Conte-nos o que você gostaria de ver no Cliente Já!
+            Sua opinião é muito importante para nós. Conte-nos o que você gostaria de ver no ClicLoop!
           </CardDescription>
         </CardHeader>
         <CardContent>
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="suggestion">O que você gostaria de ver no Cliente Já?</Label>
+                <Label htmlFor="suggestion">O que você gostaria de ver no ClicLoop?</Label>
                 <Textarea
                   id="suggestion"
                   placeholder="Descreva sua ideia, funcionalidade ou melhoria que gostaria de ver na plataforma..."

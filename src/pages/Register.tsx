@@ -118,7 +118,7 @@ const Register = () => {
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
             <Sparkles className="h-8 w-8 text-brand-primary mr-2" />
-            <h1 className="text-2xl font-bold text-brand-primary">Cliente Já</h1>
+            <h1 className="text-2xl font-bold text-brand-primary">ClicLoop</h1>
           </div>
           <CardTitle>Criar sua conta</CardTitle>
           <CardDescription>

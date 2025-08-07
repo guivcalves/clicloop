@@ -148,7 +148,7 @@ const Overview = () => {
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-2 text-gray-900">
-              Bem-vindo ao Cliente Já{user?.name ? `, ${user.name}` : ''}!
+              Bem-vindo ao ClicLoop{user?.name ? `, ${user.name}` : ''}!
             </h1>
             <p className="text-gray-600 mb-6 max-w-md">
               Escolha uma ferramenta para começar a criar conteúdo otimizado 
@@ -322,7 +322,7 @@ const Overview = () => {
           <div className="bg-white rounded-xl p-6">
             <h3 className="font-semibold mb-4 text-gray-900">Precisa de ajuda?</h3>
             <p className="text-gray-600 text-sm mb-4">
-              Nossa equipe está sempre pronta para ajudar você a aproveitar ao máximo o Cliente Já.
+              Nossa equipe está sempre pronta para ajudar você a aproveitar ao máximo o ClicLoop.
             </p>
             <Button 
               onClick={() => navigate('/dashboard/suporte')}

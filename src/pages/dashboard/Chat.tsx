@@ -18,7 +18,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: 'Olá! Sou sua assistente de IA do Cliente Já. Como posso ajudá-lo hoje?',
+      content: 'Olá! Sou sua assistente de IA do ClicLoop. Como posso ajudá-lo hoje?',
       role: 'assistant',
       timestamp: new Date()
     }
@@ -138,7 +138,7 @@ const Chat = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MessageCircle className="h-5 w-5" />
-            Assistente Cliente Já
+            Assistente ClicLoop
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col">
