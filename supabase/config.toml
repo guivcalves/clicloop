@@ -1,1 +1,4 @@
 project_id = "egrohrtaazpahdwsvzsu"
+
+[functions.aceite-termos]
+verify_jwt = false

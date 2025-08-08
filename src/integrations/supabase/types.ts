@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      aceites_termos: {
+        Row: {
+          checkout_session_id: string | null
+          consentido: boolean
+          criado_em: string
+          email: string | null
+          hmac_assinatura: string | null
+          id: string
+          ip: string | null
+          metodo: string
+          pdf_path: string | null
+          terms_hash: string
+          terms_text: string
+          terms_version: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          checkout_session_id?: string | null
+          consentido?: boolean
+          criado_em?: string
+          email?: string | null
+          hmac_assinatura?: string | null
+          id?: string
+          ip?: string | null
+          metodo: string
+          pdf_path?: string | null
+          terms_hash: string
+          terms_text: string
+          terms_version: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          checkout_session_id?: string | null
+          consentido?: boolean
+          criado_em?: string
+          email?: string | null
+          hmac_assinatura?: string | null
+          id?: string
+          ip?: string | null
+          metodo?: string
+          pdf_path?: string | null
+          terms_hash?: string
+          terms_text?: string
+          terms_version?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       campanhas_analisadas: {
         Row: {
           alcance: number
@@ -149,6 +200,30 @@ export type Database = {
           legenda?: string
           tema?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      logs_auditoria: {
+        Row: {
+          acao: string
+          criado_em: string
+          detalhes: Json
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          acao: string
+          criado_em?: string
+          detalhes: Json
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          acao?: string
+          criado_em?: string
+          detalhes?: Json
+          id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
