@@ -1,73 +1,68 @@
-# Welcome to your Lovable project
+# IA Content Creator
 
-## Project info
+Uma aplicação moderna de SaaS com ferramentas de IA para criadores, profissionais e pequenos negócios.
 
-**URL**: https://lovable.dev/projects/c1f0e726-caed-47e4-b5d7-da536c117e99
+## Tecnologias Utilizadas
 
-## How can I edit this code?
+Este projeto foi construído com:
 
-There are several ways of editing your application.
+- **Vite** - Ferramenta de build rápida
+- **TypeScript** - Tipagem estática para JavaScript
+- **React** - Biblioteca para interfaces de usuário
+- **shadcn-ui** - Componentes de UI modernos
+- **Tailwind CSS** - Framework de CSS utilitário
+- **Supabase** - Backend como serviço
 
-**Use Lovable**
+## Como executar o projeto
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c1f0e726-caed-47e4-b5d7-da536c117e99) and start prompting.
+### Pré-requisitos
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (versão 16 ou superior)
+- npm ou yarn
 
-**Use your preferred IDE**
+### Instalação
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Clone o repositório
+git clone <URL_DO_SEU_REPOSITORIO>
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Navegue até o diretório do projeto
+cd client-ja
 
-Follow these steps:
+# Instale as dependências
+npm install
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+O projeto estará disponível em `http://localhost:8080`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Estrutura do Projeto
 
-**Use GitHub Codespaces**
+```
+src/
+├── components/     # Componentes reutilizáveis
+├── contexts/       # Contextos do React
+├── hooks/          # Hooks customizados
+├── integrations/   # Integrações com serviços externos
+├── lib/            # Utilitários e configurações
+└── pages/          # Páginas da aplicação
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Scripts Disponíveis
 
-## What technologies are used for this project?
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Cria a build de produção
+- `npm run preview` - Visualiza a build de produção
+- `npm run lint` - Executa o linter
 
-This project is built with:
+## Contribuição
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Para contribuir com o projeto:
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/c1f0e726-caed-47e4-b5d7-da536c117e99) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+1. Faça um fork do repositório
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request

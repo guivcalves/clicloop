@@ -11,7 +11,7 @@ const corsHeaders = {
 // Supabase project URL (public URL is safe to embed)
 const SUPABASE_URL = "https://egrohrtaazpahdwsvzsu.supabase.co";
 
-// Secrets from Lovable/Supabase environment
+// Secrets from Supabase environment
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const ACCEPT_API_KEY = Deno.env.get("ACCEPT_API_KEY");
 const TERMS_URL = Deno.env.get("TERMS_URL");
