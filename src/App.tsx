@@ -23,6 +23,7 @@ import Billing from "./pages/Billing";
 import MinhaConta from "./pages/MinhaConta";
 import NotFound from "./pages/NotFound";
 import Forbidden from "./pages/Forbidden";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/login" element={
               <PublicRoute>
                 <Login />
