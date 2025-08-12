@@ -56,7 +56,7 @@ export function Header() {
               FAQ
             </button>
             <Button
-              onClick={() => (window.location.href = "#checkout")}
+              onClick={() => scrollToSection("planos")}
               className="btn-premium text-white px-6 py-2 rounded-full font-semibold"
             >
               Começar Agora
@@ -97,7 +97,7 @@ export function Header() {
                 FAQ
               </button>
               <Button
-                onClick={() => (window.location.href = "#checkout")}
+                onClick={() => scrollToSection("planos")}
                 className="btn-premium text-white px-6 py-2 rounded-full font-semibold w-full"
               >
                 Começar Agora

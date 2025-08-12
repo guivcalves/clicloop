@@ -2,3 +2,6 @@ project_id = "egrohrtaazpahdwsvzsu"
 
 [functions.aceite-termos]
 verify_jwt = false
+
+[functions.webhook-kiwify]
+verify_jwt = false

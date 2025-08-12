@@ -36,7 +36,7 @@ export function CheckoutConsent() {
 
       if (data.success) {
         // Simulate Stripe checkout redirection
-        window.location.href = "https://stripe.com/checkout-placeholder" // Substitua pela URL real do seu checkout Stripe
+        window.location.href = "LINK_DO_CHECKOUT" // Substitua pela URL real do seu checkout Kiwify
       } else {
         setError(data.message || "Ocorreu um erro ao processar sua solicitação. Tente novamente.")
       }
