@@ -46,6 +46,7 @@
   width: var(--sidebar-width);
   flex-shrink: 0;
   transition: width 0.3s ease;
+  overflow: hidden;
 }
 
 /* Ajuste para o topbar */
@@ -76,6 +77,17 @@
 .dashboard-content-wrapper {
   margin-left: var(--sidebar-width);
   transition: margin-left 0.3s ease;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    width: 64px;
+  }
+  
+  .dashboard-content-wrapper {
+    margin-left: 64px;
+  }
 }
 
 /* ============================================================================

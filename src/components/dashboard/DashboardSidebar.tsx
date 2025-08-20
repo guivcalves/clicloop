@@ -96,11 +96,6 @@ export function DashboardSidebar() {
     return currentPath === path;
   };
 
-  const getNavClass = (isActive: boolean) =>
-    isActive 
-      ? "bg-brand-primary text-white hover:bg-brand-primary/90" 
-      : "hover:bg-muted/50";
-
   // ============================================================================
   // EFFECTS
   // ============================================================================
@@ -144,7 +139,7 @@ export function DashboardSidebar() {
         {/* ========================================================================
             LOGO/BRAND SECTION
         ========================================================================= */}
-        <div className="p-6 border-b border-white/20 flex-shrink-0">
+        <div className="p-4 border-b border-white/20 flex-shrink-0">
           <div className="flex items-center gap-3">
             {!collapsed && (
               <h1 className="text-lg font-semibold text-white">
@@ -155,10 +150,10 @@ export function DashboardSidebar() {
         </div>
 
         {/* ========================================================================
-            NAVIGATION MENU
+            NAVIGATION MENU - TODOS OS ITENS SEMPRE VISÍVEIS
         ========================================================================= */}
-        <div className="flex-1 px-3 py-6">
-          <SidebarMenu className="space-y-2">
+        <div className="flex-1 px-3 py-4">
+          <SidebarMenu className="space-y-1">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild className="hover:bg-white/10 w-full justify-start">
@@ -166,7 +161,7 @@ export function DashboardSidebar() {
                     to={item.url} 
                     className={({ isActive: navIsActive }) => {
                       const active = navIsActive || isActive(item.url);
-                      return `flex items-center gap-3 px-3 py-3 rounded-lg transition-colors w-full ${
+                      return `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors w-full ${
                         active 
                           ? "bg-white/20 text-white shadow-lg" 
                           : "text-white/80 hover:text-white hover:bg-white/10"
