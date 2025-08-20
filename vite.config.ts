@@ -16,4 +16,10 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    // Variáveis de ambiente para o cliente
+    __PRODUCTION_URL__: JSON.stringify('https://clicloop.com.br'),
+    __DEVELOPMENT_URL__: JSON.stringify('http://localhost:8080'),
+    __SUPABASE_URL__: JSON.stringify('https://egrohrtaazpahdwsvzsu.supabase.co'),
+  },
 }));

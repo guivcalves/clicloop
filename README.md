@@ -27,7 +27,7 @@ Este projeto foi construído com:
 git clone <URL_DO_SEU_REPOSITORIO>
 
 # Navegue até o diretório do projeto
-cd client-ja
+cd sistema
 
 # Instale as dependências
 npm install
@@ -37,6 +37,13 @@ npm run dev
 ```
 
 O projeto estará disponível em `http://localhost:8080`.
+
+### URLs de Produção
+
+- **Site principal**: [https://clicloop.com.br](https://clicloop.com.br)
+- **Página de login**: [https://clicloop.com.br/login](https://clicloop.com.br/login)
+- **Página de registro**: [https://clicloop.com.br/register](https://clicloop.com.br/register)
+- **Dashboard**: [https://clicloop.com.br/dashboard](https://clicloop.com.br/dashboard)
 
 ## Estrutura do Projeto
 
