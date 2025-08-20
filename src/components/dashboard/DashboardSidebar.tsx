@@ -106,13 +106,21 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar 
-      className={`${collapsed ? "w-16" : "w-60"} border-r-0`} 
+      className={`${collapsed ? "w-16" : "w-60"} border-r-0 sidebar-fix`} 
       collapsible="icon"
-      style={{ background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)' }}
+      style={{ 
+        background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)',
+        position: 'relative',
+        zIndex: 10
+      }}
     >
       <SidebarContent 
-        className="text-white"
-        style={{ background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)' }}
+        className="text-white sidebar-fix"
+        style={{ 
+          background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)',
+          position: 'relative',
+          zIndex: 10
+        }}
       >
         
         {/* ========================================================================

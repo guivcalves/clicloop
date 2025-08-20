@@ -21,11 +21,18 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
-          <DashboardTopbar />
-          <main className="flex-1">
+      <div className="min-h-screen flex w-full bg-background dashboard-container">
+        {/* Sidebar com z-index baixo */}
+        <div className="dashboard-sidebar sidebar-fix">
+          <DashboardSidebar />
+        </div>
+        
+        {/* Conteúdo principal com z-index mais alto */}
+        <div className="flex-1 flex flex-col content-fix">
+          <div className="dashboard-topbar topbar-fix">
+            <DashboardTopbar />
+          </div>
+          <main className="flex-1 dashboard-content">
             <Outlet />
           </main>
         </div>

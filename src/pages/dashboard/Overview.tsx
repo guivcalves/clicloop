@@ -186,12 +186,12 @@ const Overview = () => {
   // ============================================================================
 
   return (
-    <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
+    <div className="space-y-8 p-6 bg-gray-50 min-h-screen content-fix">
       
       {/* ========================================================================
           WELCOME SECTION
       ========================================================================= */}
-      <div className="bg-white rounded-2xl p-8">
+      <div className="bg-white rounded-2xl p-8 dashboard-card">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-2 text-gray-900">
@@ -219,7 +219,7 @@ const Overview = () => {
       {/* ========================================================================
           MAIN CONTENT GRID
       ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 content-fix">
         
         {/* LEFT COLUMN - MAIN TOOLS */}
         <div className="lg:col-span-2 space-y-8">
@@ -227,7 +227,7 @@ const Overview = () => {
           {/* STATS CARDS */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {statsCards.map((stat, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 flex items-center justify-between">
+              <div key={index} className="bg-white rounded-xl p-6 flex items-center justify-between dashboard-card">
                 <div>
                   <p className="text-gray-600 text-sm mb-1">{stat.title}</p>
                   <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
@@ -241,7 +241,7 @@ const Overview = () => {
           </div>
 
           {/* QUICK ACTIONS */}
-          <div className="bg-white rounded-xl p-6">
+          <div className="bg-white rounded-xl p-6 dashboard-card">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-indigo-600" />
@@ -285,14 +285,14 @@ const Overview = () => {
           </div>
 
           {/* ALL TOOLS */}
-          <div className="bg-white rounded-xl p-6">
+          <div className="bg-white rounded-xl p-6 dashboard-card">
             <h2 className="text-xl font-semibold mb-6 text-gray-900">
               Todas as Ferramentas
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {tools.map((tool, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group border-0 shadow-sm">
+                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group border-0 shadow-sm dashboard-card">
                   <CardHeader className="pb-3">
                     <div className={`w-12 h-12 rounded-xl ${tool.bgColor} flex items-center justify-center mb-3`}>
                       <tool.icon className={`h-6 w-6 ${tool.color}`} />
@@ -327,10 +327,10 @@ const Overview = () => {
         </div>
 
         {/* RIGHT COLUMN - TIPS AND INFO */}
-        <div className="space-y-8">
+        <div className="space-y-8 content-fix">
           
           {/* TIP CARD */}
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-6 dashboard-card">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <Lightbulb className="h-5 w-5 text-white" />
@@ -355,7 +355,7 @@ const Overview = () => {
           </div>
 
           {/* FEATURES CARD */}
-          <div className="bg-white rounded-xl p-6">
+          <div className="bg-white rounded-xl p-6 dashboard-card">
             <h3 className="font-semibold mb-4 text-gray-900 flex items-center gap-2">
               <Crown className="h-5 w-5 text-yellow-500" />
               Recursos Premium
@@ -385,7 +385,7 @@ const Overview = () => {
           </div>
 
           {/* SUPPORT CARD */}
-          <div className="bg-white rounded-xl p-6">
+          <div className="bg-white rounded-xl p-6 dashboard-card">
             <h3 className="font-semibold mb-4 text-gray-900">
               Precisa de ajuda?
             </h3>
