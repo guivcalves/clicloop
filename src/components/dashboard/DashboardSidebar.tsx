@@ -100,10 +100,20 @@ export function DashboardSidebar() {
   // EFFECTS
   // ============================================================================
 
-  // Atualizar CSS custom property para o estado da sidebar
+  // Atualizar CSS custom property para o estado da sidebar com transição suave
   useEffect(() => {
     const sidebarWidth = collapsed ? '64px' : '256px';
     document.documentElement.style.setProperty('--sidebar-width', sidebarWidth);
+    
+    // Adicionar classe para transição suave
+    document.documentElement.classList.add('sidebar-transitioning');
+    
+    // Remover classe após transição
+    const timer = setTimeout(() => {
+      document.documentElement.classList.remove('sidebar-transitioning');
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, [collapsed]);
 
   // ============================================================================
@@ -123,7 +133,9 @@ export function DashboardSidebar() {
         height: '100vh',
         minHeight: '100vh',
         width: collapsed ? '64px' : '256px',
-        transition: 'width 0.3s ease'
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        transform: 'translateZ(0)', // Força aceleração de hardware
+        willChange: 'width' // Otimiza performance da animação
       }}
     >
       <SidebarContent 
@@ -132,17 +144,18 @@ export function DashboardSidebar() {
           background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)',
           position: 'relative',
           zIndex: 10,
-          height: '100%'
+          height: '100%',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         
         {/* ========================================================================
             LOGO/BRAND SECTION
         ========================================================================= */}
-        <div className="p-4 border-b border-white/20 flex-shrink-0">
-          <div className="flex items-center gap-3">
+        <div className="p-4 border-b border-white/20 flex-shrink-0 transition-all duration-300 ease-in-out">
+          <div className="flex items-center gap-3 justify-center">
             {!collapsed && (
-              <h1 className="text-lg font-semibold text-white">
+              <h1 className="text-lg font-semibold text-white transition-all duration-300 ease-in-out overflow-hidden">
                 ClicLoop
               </h1>
             )}
@@ -152,26 +165,26 @@ export function DashboardSidebar() {
         {/* ========================================================================
             NAVIGATION MENU - TODOS OS ITENS SEMPRE VISÍVEIS
         ========================================================================= */}
-        <div className="flex-1 px-3 py-4">
+        <div className="flex-1 px-3 py-4 transition-all duration-300 ease-in-out">
           <SidebarMenu className="space-y-1">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild className="hover:bg-white/10 w-full justify-start">
+                <SidebarMenuButton asChild className="hover:bg-white/10 w-full justify-start transition-all duration-200 ease-in-out">
                   <NavLink 
                     to={item.url} 
                     className={({ isActive: navIsActive }) => {
                       const active = navIsActive || isActive(item.url);
-                      return `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors w-full ${
+                      return `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ease-in-out w-full ${
                         active 
                           ? "bg-white/20 text-white shadow-lg" 
                           : "text-white/80 hover:text-white hover:bg-white/10"
                       }`;
                     }}
                   >
-                    <item.icon className="h-5 w-5 flex-shrink-0" />
+                    <item.icon className="h-5 w-5 flex-shrink-0 transition-all duration-200 ease-in-out" />
                     
                     {!collapsed && (
-                      <span className="text-sm font-medium text-left">
+                      <span className="text-sm font-medium text-left transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap">
                         {item.title}
                       </span>
                     )}

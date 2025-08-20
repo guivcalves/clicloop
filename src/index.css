@@ -10,6 +10,9 @@
 /* CSS Custom Properties para largura da sidebar */
 :root {
   --sidebar-width: 256px;
+  --sidebar-collapsed-width: 64px;
+  --transition-duration: 0.3s;
+  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Fix para z-index da sidebar */
@@ -35,7 +38,7 @@
   overflow: auto;
 }
 
-/* Ajuste específico para a sidebar fixa */
+/* Ajuste específico para a sidebar fixa com transições suaves */
 .dashboard-sidebar {
   position: fixed;
   left: 0;
@@ -45,8 +48,16 @@
   min-height: 100vh;
   width: var(--sidebar-width);
   flex-shrink: 0;
-  transition: width 0.3s ease;
+  transition: all var(--transition-duration) var(--transition-easing);
   overflow: hidden;
+  transform: translateZ(0); /* Força aceleração de hardware */
+  will-change: width; /* Otimiza performance da animação */
+  backface-visibility: hidden; /* Melhora performance */
+}
+
+/* Classe para transições suaves */
+.sidebar-transitioning {
+  --sidebar-width: var(--sidebar-width);
 }
 
 /* Ajuste para o topbar */
@@ -76,17 +87,108 @@
 /* Classe para ajustar o margin-left do conteúdo baseado na sidebar */
 .dashboard-content-wrapper {
   margin-left: var(--sidebar-width);
-  transition: margin-left 0.3s ease;
+  transition: margin-left var(--transition-duration) var(--transition-easing);
+  transform: translateZ(0); /* Força aceleração de hardware */
+  will-change: margin-left; /* Otimiza performance da animação */
+}
+
+/* Transições suaves para elementos da sidebar */
+.dashboard-sidebar * {
+  transition: all var(--transition-duration) var(--transition-easing);
+}
+
+/* Otimizações específicas para ícones e textos */
+.dashboard-sidebar .icon-transition {
+  transition: all 0.2s var(--transition-easing);
+}
+
+.dashboard-sidebar .text-transition {
+  transition: all 0.3s var(--transition-easing);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Estados de hover suaves */
+.dashboard-sidebar .hover-smooth {
+  transition: all 0.2s var(--transition-easing);
+}
+
+.dashboard-sidebar .hover-smooth:hover {
+  transform: translateX(2px);
 }
 
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
   .dashboard-sidebar {
-    width: 64px;
+    width: var(--sidebar-collapsed-width);
   }
   
   .dashboard-content-wrapper {
-    margin-left: 64px;
+    margin-left: var(--sidebar-collapsed-width);
+  }
+}
+
+/* Responsividade para telas muito pequenas */
+@media (max-width: 480px) {
+  .dashboard-sidebar {
+    width: 56px;
+  }
+  
+  .dashboard-content-wrapper {
+    margin-left: 56px;
+  }
+}
+
+/* Otimizações para telas de alta resolução */
+@media (min-width: 1920px) {
+  .dashboard-sidebar {
+    width: 280px;
+  }
+  
+  .dashboard-content-wrapper {
+    margin-left: 280px;
+  }
+}
+
+/* Animações de entrada suaves */
+@keyframes sidebarSlideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.sidebar-enter {
+  animation: sidebarSlideIn 0.3s var(--transition-easing);
+}
+
+/* Estados de foco para acessibilidade */
+.dashboard-sidebar button:focus,
+.dashboard-sidebar a:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Melhorias de performance para dispositivos móveis */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-sidebar,
+  .dashboard-content-wrapper,
+  .dashboard-sidebar * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Suporte para modo escuro do sistema */
+@media (prefers-color-scheme: dark) {
+  .dashboard-sidebar {
+    /* Mantém as cores existentes, mas adiciona suporte para modo escuro se necessário */
+    filter: brightness(1.1);
   }
 }
 
