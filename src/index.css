@@ -7,6 +7,11 @@
    CUSTOM CSS FOR CLICLOOP
    ========================================================================= */
 
+/* CSS Custom Properties para largura da sidebar */
+:root {
+  --sidebar-width: 256px;
+}
+
 /* Fix para z-index da sidebar */
 .sidebar-fix {
   position: relative;
@@ -30,14 +35,17 @@
   overflow: auto;
 }
 
-/* Ajuste específico para a sidebar */
+/* Ajuste específico para a sidebar fixa */
 .dashboard-sidebar {
-  position: relative;
+  position: fixed;
+  left: 0;
+  top: 0;
   z-index: 10;
   height: 100vh;
   min-height: 100vh;
-  width: auto;
+  width: var(--sidebar-width);
   flex-shrink: 0;
+  transition: width 0.3s ease;
 }
 
 /* Ajuste para o topbar */
@@ -62,6 +70,12 @@
   z-index: 20;
   height: 100vh;
   overflow: hidden;
+}
+
+/* Classe para ajustar o margin-left do conteúdo baseado na sidebar */
+.dashboard-content-wrapper {
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s ease;
 }
 
 /* ============================================================================

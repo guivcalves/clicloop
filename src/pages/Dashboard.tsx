@@ -22,13 +22,11 @@ const Dashboard = () => {
   return (
     <SidebarProvider>
       <div className="h-screen flex w-full bg-background dashboard-container overflow-hidden">
-        {/* Sidebar com z-index baixo e altura completa */}
-        <div className="dashboard-sidebar sidebar-fix h-screen">
-          <DashboardSidebar />
-        </div>
+        {/* Sidebar fixa na lateral */}
+        <DashboardSidebar />
         
-        {/* Conteúdo principal com z-index mais alto */}
-        <div className="flex-1 flex flex-col content-fix min-w-0">
+        {/* Conteúdo principal com margin dinâmico */}
+        <div className="flex-1 flex flex-col content-fix min-w-0 dashboard-content-wrapper">
           <div className="dashboard-topbar topbar-fix">
             <DashboardTopbar />
           </div>

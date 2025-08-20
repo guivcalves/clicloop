@@ -21,6 +21,7 @@ import {
   Layout,
   Triangle
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -101,6 +102,16 @@ export function DashboardSidebar() {
       : "hover:bg-muted/50";
 
   // ============================================================================
+  // EFFECTS
+  // ============================================================================
+
+  // Atualizar CSS custom property para o estado da sidebar
+  useEffect(() => {
+    const sidebarWidth = collapsed ? '64px' : '256px';
+    document.documentElement.style.setProperty('--sidebar-width', sidebarWidth);
+  }, [collapsed]);
+
+  // ============================================================================
   // RENDER
   // ============================================================================
 
@@ -110,10 +121,14 @@ export function DashboardSidebar() {
       collapsible="icon"
       style={{ 
         background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)',
-        position: 'relative',
+        position: 'fixed',
+        left: 0,
+        top: 0,
         zIndex: 10,
         height: '100vh',
-        minHeight: '100vh'
+        minHeight: '100vh',
+        width: collapsed ? '64px' : '256px',
+        transition: 'width 0.3s ease'
       }}
     >
       <SidebarContent 
@@ -142,7 +157,7 @@ export function DashboardSidebar() {
         {/* ========================================================================
             NAVIGATION MENU
         ========================================================================= */}
-        <div className="flex-1 px-3 py-6 overflow-y-auto">
+        <div className="flex-1 px-3 py-6">
           <SidebarMenu className="space-y-2">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.title}>
