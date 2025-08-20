@@ -106,27 +106,30 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar 
-      className={`${collapsed ? "w-16" : "w-60"} border-r-0 sidebar-fix`} 
+      className={`${collapsed ? "w-16" : "w-64"} h-screen border-r-0 sidebar-fix flex-shrink-0`} 
       collapsible="icon"
       style={{ 
         background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)',
         position: 'relative',
-        zIndex: 10
+        zIndex: 10,
+        height: '100vh',
+        minHeight: '100vh'
       }}
     >
       <SidebarContent 
-        className="text-white sidebar-fix"
+        className="text-white sidebar-fix h-full flex flex-col"
         style={{ 
           background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)',
           position: 'relative',
-          zIndex: 10
+          zIndex: 10,
+          height: '100%'
         }}
       >
         
         {/* ========================================================================
             LOGO/BRAND SECTION
         ========================================================================= */}
-        <div className="p-6 border-b border-white/20">
+        <div className="p-6 border-b border-white/20 flex-shrink-0">
           <div className="flex items-center gap-3">
             {!collapsed && (
               <h1 className="text-lg font-semibold text-white">
@@ -139,16 +142,16 @@ export function DashboardSidebar() {
         {/* ========================================================================
             NAVIGATION MENU
         ========================================================================= */}
-        <div className="px-3 py-6">
+        <div className="flex-1 px-3 py-6 overflow-y-auto">
           <SidebarMenu className="space-y-2">
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild className="hover:bg-white/10">
+                <SidebarMenuButton asChild className="hover:bg-white/10 w-full justify-start">
                   <NavLink 
                     to={item.url} 
                     className={({ isActive: navIsActive }) => {
                       const active = navIsActive || isActive(item.url);
-                      return `flex items-center gap-3 px-3 py-3 rounded-lg transition-colors ${
+                      return `flex items-center gap-3 px-3 py-3 rounded-lg transition-colors w-full ${
                         active 
                           ? "bg-white/20 text-white shadow-lg" 
                           : "text-white/80 hover:text-white hover:bg-white/10"
@@ -158,7 +161,7 @@ export function DashboardSidebar() {
                     <item.icon className="h-5 w-5 flex-shrink-0" />
                     
                     {!collapsed && (
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium text-left">
                         {item.title}
                       </span>
                     )}

@@ -27,7 +27,7 @@
 .dashboard-content {
   position: relative;
   z-index: 20;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* Ajuste específico para a sidebar */
@@ -35,7 +35,9 @@
   position: relative;
   z-index: 10;
   height: 100vh;
-  overflow-y: auto;
+  min-height: 100vh;
+  width: auto;
+  flex-shrink: 0;
 }
 
 /* Ajuste para o topbar */
@@ -45,6 +47,7 @@
   z-index: 30;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
 /* Garantir que os cards não sejam sobrepostos */
@@ -57,7 +60,8 @@
 .dashboard-container {
   position: relative;
   z-index: 20;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* ============================================================================
