@@ -22,7 +22,21 @@ import {
   Triangle
 } from 'lucide-react';
 
-const menuItems = [
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+
+interface MenuItem {
+  title: string;
+  url: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+// ============================================================================
+// DATA
+// ============================================================================
+
+const menuItems: MenuItem[] = [
   {
     title: "Dashboard",
     url: "/dashboard",
@@ -60,11 +74,19 @@ const menuItems = [
   },
 ];
 
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 export function DashboardSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
   const collapsed = state === 'collapsed';
+
+  // ============================================================================
+  // HELPER FUNCTIONS
+  // ============================================================================
 
   const isActive = (path: string) => {
     if (path === '/dashboard') {
@@ -78,6 +100,10 @@ export function DashboardSidebar() {
       ? "bg-brand-primary text-white hover:bg-brand-primary/90" 
       : "hover:bg-muted/50";
 
+  // ============================================================================
+  // RENDER
+  // ============================================================================
+
   return (
     <Sidebar 
       className={`${collapsed ? "w-16" : "w-60"} border-r-0`} 
@@ -88,16 +114,23 @@ export function DashboardSidebar() {
         className="text-white"
         style={{ background: 'linear-gradient(180deg, #6366F1 0%, #9333EA 100%)' }}
       >
-        {/* Logo/Brand Section */}
+        
+        {/* ========================================================================
+            LOGO/BRAND SECTION
+        ========================================================================= */}
         <div className="p-6 border-b border-white/20">
           <div className="flex items-center gap-3">
             {!collapsed && (
-              <h1 className="text-lg font-semibold text-white">ClicLoop</h1>
+              <h1 className="text-lg font-semibold text-white">
+                ClicLoop
+              </h1>
             )}
           </div>
         </div>
 
-        {/* Navigation Menu */}
+        {/* ========================================================================
+            NAVIGATION MENU
+        ========================================================================= */}
         <div className="px-3 py-6">
           <SidebarMenu className="space-y-2">
             {menuItems.map((item) => (
@@ -115,8 +148,11 @@ export function DashboardSidebar() {
                     }}
                   >
                     <item.icon className="h-5 w-5 flex-shrink-0" />
+                    
                     {!collapsed && (
-                      <span className="text-sm font-medium">{item.title}</span>
+                      <span className="text-sm font-medium">
+                        {item.title}
+                      </span>
                     )}
                   </NavLink>
                 </SidebarMenuButton>

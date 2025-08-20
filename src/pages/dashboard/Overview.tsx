@@ -21,14 +21,50 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+
+interface UserStats {
+  tools: number;
+  content: number;
+  prompts: number;
+}
+
+interface Tool {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  path: string;
+  color: string;
+  bgColor: string;
+  features: string[];
+}
+
+interface StatCard {
+  title: string;
+  value: string;
+  icon: React.ComponentType<{ className?: string }>;
+  bgColor: string;
+  iconColor: string;
+}
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
 const Overview = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<UserStats>({
     tools: 6,
     content: 0,
     prompts: 0
   });
+
+  // ============================================================================
+  // EFFECTS
+  // ============================================================================
 
   useEffect(() => {
     const fetchUserStats = async () => {
@@ -60,7 +96,11 @@ const Overview = () => {
     fetchUserStats();
   }, [user?.id]);
 
-  const tools = [
+  // ============================================================================
+  // DATA
+  // ============================================================================
+
+  const tools: Tool[] = [
     {
       title: "Criador de Conteúdo",
       description: "Gere conteúdo otimizado para suas redes sociais com IA",
@@ -117,7 +157,7 @@ const Overview = () => {
     }
   ];
 
-  const statsCards = [
+  const statsCards: StatCard[] = [
     {
       title: "Ferramentas Ativas",
       value: stats.tools.toString(),
@@ -141,9 +181,16 @@ const Overview = () => {
     }
   ];
 
+  // ============================================================================
+  // RENDER
+  // ============================================================================
+
   return (
     <div className="space-y-8 p-6 bg-gray-50 min-h-screen">
-      {/* Welcome Section */}
+      
+      {/* ========================================================================
+          WELCOME SECTION
+      ========================================================================= */}
       <div className="bg-white rounded-2xl p-8">
         <div className="flex items-center justify-between">
           <div className="flex-1">
@@ -159,6 +206,7 @@ const Overview = () => {
               <span className="text-sm font-medium">Potencializado por IA</span>
             </div>
           </div>
+          
           <div className="flex-shrink-0 ml-8">
             <div className="w-64 h-48 bg-gradient-to-br from-indigo-400 via-purple-500 to-purple-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-400/20 to-purple-600/20"></div>
@@ -168,10 +216,15 @@ const Overview = () => {
         </div>
       </div>
 
+      {/* ========================================================================
+          MAIN CONTENT GRID
+      ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Main Tools */}
+        
+        {/* LEFT COLUMN - MAIN TOOLS */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Stats Cards */}
+          
+          {/* STATS CARDS */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {statsCards.map((stat, index) => (
               <div key={index} className="bg-white rounded-xl p-6 flex items-center justify-between">
@@ -187,7 +240,7 @@ const Overview = () => {
             ))}
           </div>
 
-          {/* Quick Actions */}
+          {/* QUICK ACTIONS */}
           <div className="bg-white rounded-xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
@@ -195,6 +248,7 @@ const Overview = () => {
                 Ações Rápidas
               </h2>
             </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button 
                 onClick={() => navigate('/dashboard/conteudo')}
@@ -205,6 +259,7 @@ const Overview = () => {
                   <span className="font-medium">Criar Conteúdo</span>
                 </div>
               </Button>
+              
               <Button 
                 onClick={() => navigate('/dashboard/prompts')}
                 variant="outline"
@@ -215,6 +270,7 @@ const Overview = () => {
                   <span className="font-medium">Gerar Prompt</span>
                 </div>
               </Button>
+              
               <Button 
                 onClick={() => navigate('/dashboard/chat')}
                 variant="outline"
@@ -228,9 +284,12 @@ const Overview = () => {
             </div>
           </div>
 
-          {/* All Tools */}
+          {/* ALL TOOLS */}
           <div className="bg-white rounded-xl p-6">
-            <h2 className="text-xl font-semibold mb-6 text-gray-900">Todas as Ferramentas</h2>
+            <h2 className="text-xl font-semibold mb-6 text-gray-900">
+              Todas as Ferramentas
+            </h2>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {tools.map((tool, index) => (
                 <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group border-0 shadow-sm">
@@ -241,6 +300,7 @@ const Overview = () => {
                     <CardTitle className="text-lg">{tool.title}</CardTitle>
                     <CardDescription>{tool.description}</CardDescription>
                   </CardHeader>
+                  
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       {tool.features.map((feature, featureIndex) => (
@@ -250,6 +310,7 @@ const Overview = () => {
                         </div>
                       ))}
                     </div>
+                    
                     <Button 
                       onClick={() => navigate(tool.path)}
                       variant="outline" 
@@ -265,20 +326,23 @@ const Overview = () => {
           </div>
         </div>
 
-        {/* Right Column - Tips and Info */}
+        {/* RIGHT COLUMN - TIPS AND INFO */}
         <div className="space-y-8">
-          {/* Tip Card */}
+          
+          {/* TIP CARD */}
           <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-6">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <Lightbulb className="h-5 w-5 text-white" />
               </div>
+              
               <div>
                 <h3 className="font-semibold mb-2 text-gray-900">💡 Dica do dia</h3>
                 <p className="text-gray-700 mb-3 text-sm">
                   Combine o <strong>Criador de Conteúdo</strong> com o <strong>Construtor de Prompts</strong> 
                   para criar campanhas ainda mais eficazes!
                 </p>
+                
                 <Button 
                   size="sm" 
                   onClick={() => navigate('/dashboard/conteudo')}
@@ -290,12 +354,13 @@ const Overview = () => {
             </div>
           </div>
 
-          {/* Features Card */}
+          {/* FEATURES CARD */}
           <div className="bg-white rounded-xl p-6">
             <h3 className="font-semibold mb-4 text-gray-900 flex items-center gap-2">
               <Crown className="h-5 w-5 text-yellow-500" />
               Recursos Premium
             </h3>
+            
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <div className="w-2 h-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full"></div>
@@ -310,6 +375,7 @@ const Overview = () => {
                 Suporte prioritário
               </div>
             </div>
+            
             <Button 
               onClick={() => navigate('/billing')}
               className="w-full mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
@@ -318,12 +384,16 @@ const Overview = () => {
             </Button>
           </div>
 
-          {/* Support Card */}
+          {/* SUPPORT CARD */}
           <div className="bg-white rounded-xl p-6">
-            <h3 className="font-semibold mb-4 text-gray-900">Precisa de ajuda?</h3>
+            <h3 className="font-semibold mb-4 text-gray-900">
+              Precisa de ajuda?
+            </h3>
+            
             <p className="text-gray-600 text-sm mb-4">
               Nossa equipe está sempre pronta para ajudar você a aproveitar ao máximo o ClicLoop.
             </p>
+            
             <Button 
               onClick={() => navigate('/dashboard/suporte')}
               variant="outline"
