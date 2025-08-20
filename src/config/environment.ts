@@ -1,4 +1,6 @@
 // Configuração de ambiente para diferentes URLs
+import { productionConfig, productionUrls } from './production';
+
 export const environment = {
   // URLs base para diferentes ambientes
   development: {
@@ -7,9 +9,9 @@ export const environment = {
     supabaseUrl: 'https://egrohrtaazpahdwsvzsu.supabase.co'
   },
   production: {
-    baseUrl: 'https://clicloop.com.br',
-    apiUrl: 'https://clicloop.com.br',
-    supabaseUrl: 'https://egrohrtaazpahdwsvzsu.supabase.co'
+    baseUrl: productionConfig.baseUrl,
+    apiUrl: productionConfig.apiUrl,
+    supabaseUrl: productionConfig.supabaseUrl
   }
 };
 
