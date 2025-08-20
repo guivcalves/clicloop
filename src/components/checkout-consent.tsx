@@ -21,28 +21,18 @@ export function CheckoutConsent() {
       return
     }
 
+    // Simular um pequeno delay para mostrar o loading
+    await new Promise(resolve => setTimeout(resolve, 500))
+
     try {
-      const response = await fetch("/api/accept-terms", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        // Simulate Stripe checkout redirection
-        window.location.href = "LINK_DO_CHECKOUT" // Substitua pela URL real do seu checkout Kiwify
-      } else {
-        setError(data.message || "Ocorreu um erro ao processar sua solicitação. Tente novamente.")
-      }
+      // Armazenar o email no localStorage para referência futura
+      localStorage.setItem('clicloop_user_email', email)
+      
+      // Redirecionar diretamente para o checkout Kiwify
+      window.location.href = "https://pay.cakto.com.br/k2rh6sp_535214"
     } catch (err) {
-      console.error("Erro na requisição:", err)
-      setError("Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.")
+      console.error("Erro ao redirecionar:", err)
+      setError("Ocorreu um erro ao redirecionar para o checkout. Tente novamente.")
     } finally {
       setIsLoading(false)
     }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CheckoutConsent } from "./checkout-consent"
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -28,6 +29,7 @@ const navigationItems: NavigationItem[] = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [showConsentModal, setShowConsentModal] = useState(false)
 
   // ============================================================================
   // EFFECTS
@@ -91,7 +93,7 @@ export function Header() {
             ))}
             
             <Button
-              onClick={() => scrollToSection("planos")}
+              onClick={() => setShowConsentModal(true)}
               className="btn-premium text-white px-6 py-2 rounded-full font-semibold"
             >
               Começar Agora
@@ -128,7 +130,7 @@ export function Header() {
               ))}
               
               <Button
-                onClick={() => scrollToSection("planos")}
+                onClick={() => setShowConsentModal(true)}
                 className="btn-premium text-white px-6 py-2 rounded-full font-semibold w-full"
               >
                 Começar Agora
@@ -137,6 +139,24 @@ export function Header() {
           </div>
         )}
       </div>
+
+      {/* Modal de Consentimento */}
+      {showConsentModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">Começar Agora</h3>
+              <button
+                onClick={() => setShowConsentModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <CheckoutConsent />
+          </div>
+        </div>
+      )}
     </header>
   )
 }
